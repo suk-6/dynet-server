@@ -39,7 +39,7 @@ class userDB:
         self.conn.commit()
 
     def insert(self, email, password, name, admin=0, confirmed=0, etc=""):
-        if self.getUser(email):
+        if self.exists(email):
             raise Exception("User already exists")
 
         encryptPassword = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
@@ -54,6 +54,18 @@ class userDB:
         self.conn.commit()
 
         return self.getUser(email, password)
+
+    def exists(self, email):
+        self.cursor.execute(
+            """
+            SELECT * FROM user WHERE email=?
+            """,
+            (email,),
+        )
+        user = self.cursor.fetchone()
+        if not user:
+            return False
+        return True
 
     def getUser(self, email, password):
         self.cursor.execute(
