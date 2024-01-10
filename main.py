@@ -18,14 +18,14 @@ async def root():
 @app.post("/api/user/signup")
 async def signup(user: SignupUser):
     userData = userDBC.insert(**user.model_dump())
-    vpnManage.addPeer(userData.email)
+    vpnManage.addPeer(email=userData[1])
     return {"message": "Success"}
 
 
 @app.post("/api/user/signin")
 async def signin(user: SigninUser):
     userData = userDBC.getUser(**user.model_dump())
-    peer = vpnManage.getPeer(userData.email)
+    peer = vpnManage.getPeer(email=userData[1])
     peer = base64.b64encode(peer.encode()).decode()
     return {"message": "Success", "peer": peer}
 

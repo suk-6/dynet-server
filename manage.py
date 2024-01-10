@@ -10,11 +10,11 @@ load_dotenv()
 def namefilter(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        name = kwargs.get("name")
-        if not name:
-            raise Exception("No name provided")
-        if not all(c in string.ascii_letters + string.digits + "-" for c in name):
-            raise Exception("Name contains invalid characters")
+        email = kwargs.get("email")
+        if not email:
+            raise Exception("No email provided")
+        if not all(c in string.ascii_letters + string.digits + "-_@." for c in email):
+            raise Exception("Email contains invalid characters")
         return func(*args, **kwargs)
 
     return wrapper
@@ -38,18 +38,18 @@ class Manage:
         raise Exception("Peer not found")
 
     @namefilter
-    def addPeer(self, name):
-        os.system(f"pivpn add -n {name}")
+    def addPeer(self, email):
+        os.system(f"pivpn add -n {email}")
 
-        if f"{name}.conf" in self.getPeers():
+        if f"{email}.conf" in self.getPeers():
             return True
         raise Exception("Peer not added")
 
     @namefilter
-    def removePeer(self, name):
-        os.system(f"pivpn remove -y {name}")
+    def removePeer(self, email):
+        os.system(f"pivpn remove -y {email}")
 
-        if f"{name}.conf" not in self.getPeers():
+        if f"{email}.conf" not in self.getPeers():
             return True
         raise Exception("Peer not removed")
 
