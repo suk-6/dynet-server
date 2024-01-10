@@ -24,12 +24,12 @@ class Manage:
     def getPeers(self):
         return os.listdir(self.path)
 
-    def getPeer(self, peer):
-        if not peer.endswith(".conf"):
-            peer += ".conf"
+    def getPeer(self, email):
+        if not email.endswith(".conf"):
+            email += ".conf"
 
-        if peer in self.getPeers():
-            with open(osp.join(self.path, peer)) as f:
+        if email in self.getPeers():
+            with open(osp.join(self.path, email)) as f:
                 return f.read()
         raise Exception("Peer not found")
 
