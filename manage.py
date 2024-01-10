@@ -2,9 +2,6 @@ import os
 import string
 import os.path as osp
 from functools import wraps
-from dotenv import load_dotenv
-
-load_dotenv()
 
 
 def namefilter(func):
@@ -22,8 +19,7 @@ def namefilter(func):
 
 class Manage:
     def __init__(self):
-        # self.path = osp.join("/", "home", "pi", "configs")
-        self.path = osp.join("configs")
+        self.path = osp.join("/", "home", "pi", "configs")
 
     def getPeers(self):
         return os.listdir(self.path)
