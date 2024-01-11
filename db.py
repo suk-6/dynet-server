@@ -1,3 +1,4 @@
+import json
 import bcrypt
 import sqlite3
 
@@ -38,11 +39,15 @@ class userDB:
         )
         self.conn.commit()
 
-    def insert(self, email, password, name, admin=0, confirmed=0, etc=""):
+    def insert(self, email, password, name, admin=0, confirmed=0, etc={}, studentId=""):
         if self.exists(email):
             raise Exception("User already exists")
 
+        if etc == {}:
+            etc["studentId"] = studentId
+
         encryptPassword = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+        etc = json.dumps(etc)
 
         self.cursor.execute(
             """
@@ -101,7 +106,9 @@ class userDB:
         )
         self.conn.commit()
 
-    def setEtc(self, email, etc):
+    def setEtc(self, email, etc: dict):
+        etc = json.dumps(etc)
+
         self.cursor.execute(
             """
             UPDATE user SET etc=? WHERE email=?
