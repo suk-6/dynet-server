@@ -1,6 +1,8 @@
 import os
+import json
 import string
 import os.path as osp
+from config import *
 from functools import wraps
 
 
@@ -30,7 +32,20 @@ class Manage:
 
         if uuid in self.getPeers():
             with open(osp.join(self.path, uuid)) as f:
-                return f.read()
+                data = f.read().split("\n")
+
+                return json.dumps(
+                    {
+                        "privateKey": data[1].split(" = ")[1],
+                        "address": data[2].split(" = ")[1],
+                        "publicKey": data[6].split(" = ")[1],
+                        "presharedKey": data[7].split(" = ")[1],
+                        "endpoint": ENDPOINT,
+                        "allowedIPs": ALLOWEDIPS,
+                        "dns": DNS,
+                    }
+                )
+
         raise Exception("Peer not found")
 
     @namefilter
