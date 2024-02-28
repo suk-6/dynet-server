@@ -31,7 +31,7 @@ class userDB:
                 password TEXT NOT NULL,
                 name TEXT NOT NULL,
                 admin INTEGER NOT NULL DEFAULT 0,
-                etc TEXT NOT NULL,
+                etc TEXT NOT NULL
             )
             """
         )
