@@ -13,7 +13,7 @@ def singleSignup():
     userDBC.insert(id, password, name, admin)
 
     user = userDBC.getUser(id, password)
-    vpnManage.addPeer(uid=user[0])
+    vpnManage.addPeer(uuid=user[0])
 
 
 if __name__ == "__main__":

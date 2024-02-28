@@ -27,7 +27,7 @@ class userDB:
         self.cursor.execute(
             """
             CREATE TABLE user (
-                uid INTEGER PRIMARY KEY NOT NULL,
+                uuid TEXT PRIMARY KEY NOT NULL,
                 id TEXT NOT NULL,
                 password TEXT NOT NULL,
                 name TEXT NOT NULL,
@@ -47,7 +47,7 @@ class userDB:
 
         self.cursor.execute(
             """
-            INSERT INTO user (uid, id, password, name, admin, etc)
+            INSERT INTO user (uuid, id, password, name, admin, etc)
             VALUES (?, ?, ?, ?, ?, ?)
             """,
             (str(uuid.uuid4()), id, encryptPassword, name, admin, etc),

@@ -18,7 +18,7 @@ async def root():
 @app.post("/signin")
 async def signin(user: SigninUser):
     userData = userDBC.getUser(**user.model_dump())
-    peer = vpnManage.getPeer(uid=userData[0])
+    peer = vpnManage.getPeer(uuid=userData[0])
     peer = base64.b64encode(peer.encode()).decode()
     return {"message": "Success", "peer": peer}
 
