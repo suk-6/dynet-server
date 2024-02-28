@@ -27,57 +27,52 @@ class userDB:
             """
             CREATE TABLE user (
                 uid INTEGER PRIMARY KEY AUTOINCREMENT,
-                email TEXT NOT NULL,
+                id TEXT NOT NULL,
                 password TEXT NOT NULL,
                 name TEXT NOT NULL,
                 admin INTEGER NOT NULL DEFAULT 0,
-                confirmed INTEGER NOT NULL DEFAULT 0,
-                etc TEXT,
-                UNIQUE(email)
+                etc TEXT NOT NULL,
             )
             """
         )
         self.conn.commit()
 
-    def insert(self, email, password, name, admin=0, confirmed=0, etc={}, studentId=""):
-        if self.exists(email):
+    def insert(self, id, password, name, admin=0, etc={}):
+        if self.exists(id):
             raise Exception("User already exists")
-
-        if etc == {}:
-            etc["studentId"] = studentId
 
         encryptPassword = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
         etc = json.dumps(etc)
 
         self.cursor.execute(
             """
-            INSERT INTO user (email, password, name, admin, confirmed, etc)
+            INSERT INTO user (id, password, name, admin, etc)
             VALUES (?, ?, ?, ?, ?, ?)
             """,
-            (email, encryptPassword, name, admin, confirmed, etc),
+            (id, encryptPassword, name, admin, etc),
         )
         self.conn.commit()
 
-        return self.getUser(email, password)
+        return self.getUser(id, password)
 
-    def exists(self, email):
+    def exists(self, id):
         self.cursor.execute(
             """
-            SELECT * FROM user WHERE email=?
+            SELECT * FROM user WHERE id=?
             """,
-            (email,),
+            (id,),
         )
         user = self.cursor.fetchone()
         if not user:
             return False
         return True
 
-    def getUser(self, email, password):
+    def getUser(self, id, password):
         self.cursor.execute(
             """
-            SELECT * FROM user WHERE email=?
+            SELECT * FROM user WHERE id=?
             """,
-            (email,),
+            (id,),
         )
         user = self.cursor.fetchone()
         if not user:
@@ -88,31 +83,22 @@ class userDB:
 
         return user
 
-    def setAdmin(self, email, admin):
+    def setAdmin(self, id, admin):  # 0: user, 1: admin
         self.cursor.execute(
             """
-            UPDATE user SET admin=? WHERE email=?
+            UPDATE user SET admin=? WHERE id=?
             """,
-            (admin, email),
+            (admin, id),
         )
         self.conn.commit()
 
-    def setConfirmed(self, email, confirmed):
-        self.cursor.execute(
-            """
-            UPDATE user SET confirmed=? WHERE email=?
-            """,
-            (confirmed, email),
-        )
-        self.conn.commit()
-
-    def setEtc(self, email, etc: dict):
+    def setEtc(self, id, etc: dict):
         etc = json.dumps(etc)
 
         self.cursor.execute(
             """
-            UPDATE user SET etc=? WHERE email=?
+            UPDATE user SET etc=? WHERE id=?
             """,
-            (etc, email),
+            (etc, id),
         )
         self.conn.commit()
