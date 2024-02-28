@@ -17,16 +17,22 @@ async def root():
 
 @app.post("/signin")
 async def signin(user: SigninUser):
-    userData = userDBC.getUser(**user.model_dump())
-    peer = vpnManage.getPeer(uuid=userData[0])
-    peer = base64.b64encode(peer.encode()).decode()
-    return {"message": "Success", "peer": peer}
+    try:
+        userData = userDBC.getUser(**user.model_dump())
+        peer = vpnManage.getPeer(uuid=userData[0])
+        peer = base64.b64encode(peer.encode()).decode()
+        return {"message": "Success", "peer": peer}
+    except Exception as e:
+        return {"message": str(e)}
 
 
 @app.post("/password-change")
 async def password_change(user: PasswordChange):
-    userDBC.updatePassword(**user.model_dump())
-    return {"message": "Success"}
+    try:
+        userDBC.updatePassword(**user.model_dump())
+        return {"message": "Success"}
+    except Exception as e:
+        return {"message": str(e)}
 
 
 if __name__ == "__main__":
