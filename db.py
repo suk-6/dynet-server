@@ -47,7 +47,7 @@ class userDB:
         self.cursor.execute(
             """
             INSERT INTO user (id, password, name, admin, etc)
-            VALUES (?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?)
             """,
             (id, encryptPassword, name, admin, etc),
         )
@@ -100,5 +100,20 @@ class userDB:
             UPDATE user SET etc=? WHERE id=?
             """,
             (etc, id),
+        )
+        self.conn.commit()
+
+    def updatePassword(self, id, password, newPassword):
+        self.getUser(id, password)
+        if password == newPassword:
+            raise Exception("Password is same")
+
+        newPassword = bcrypt.hashpw(newPassword.encode(), bcrypt.gensalt()).decode()
+
+        self.cursor.execute(
+            """
+            UPDATE user SET password=? WHERE id=?
+            """,
+            (newPassword, id),
         )
         self.conn.commit()
