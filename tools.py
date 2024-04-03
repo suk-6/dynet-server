@@ -20,12 +20,23 @@ def showAllUsers():
     for user in users:
         print(user)
 
+def multiSignup(prefix, password, start=1, count=10):
+    for i in range(start, start + count):
+        id = f"{prefix}{i}"
+        name = f"{prefix}{i}"
+        admin = 0
+        userDBC.insert(id, password, name, admin)
+
+        user = userDBC.getUser(id, password)
+        vpnManage.addPeer(uuid=user[0])
+
 
 if __name__ == "__main__":
     print(
         """
         1. Single signup
         2. Show all users
+        3. Multi signup
         """
     )
     choice = int(input("Enter your choice: "))
@@ -34,3 +45,9 @@ if __name__ == "__main__":
         singleSignup()
     elif choice == 2:
         showAllUsers()
+    elif choice == 3:
+        prefix = input("Prefix: ") # ex) user
+        start = input("Start number: ") # ex) 1
+        count = input("Count: ") # ex) 10
+        password = input("Password: ")
+        multiSignup(prefix, password, int(start), int(count))
