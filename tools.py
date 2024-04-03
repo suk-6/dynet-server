@@ -30,6 +30,11 @@ def multiSignup(prefix, password, start=1, count=10):
         user = userDBC.getUser(id, password)
         vpnManage.addPeer(uuid=user[0])
 
+def removeUser(id):
+    user = userDBC.getUser(id, "password")
+    vpnManage.removePeer(uuid=user[0])
+    userDBC.delete(id)
+
 
 if __name__ == "__main__":
     print(
@@ -37,6 +42,7 @@ if __name__ == "__main__":
         1. Single signup
         2. Show all users
         3. Multi signup
+        4. Remove user
         """
     )
     choice = int(input("Enter your choice: "))
@@ -51,3 +57,6 @@ if __name__ == "__main__":
         count = input("Count: ") # ex) 10
         password = input("Password: ")
         multiSignup(prefix, password, int(start), int(count))
+    elif choice == 4:
+        id = input("id: ")
+        removeUser(id)

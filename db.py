@@ -55,6 +55,18 @@ class userDB:
         self.conn.commit()
 
         return self.getUser(id, password)
+    
+    def delete(self, id):
+        if not self.exists(id):
+            raise Exception("User not found")
+        
+        self.cursor.execute(
+            """
+            DELETE FROM user WHERE id=?
+            """,
+            (id,),
+        )
+        self.conn.commit()
 
     def exists(self, id):
         self.cursor.execute(
