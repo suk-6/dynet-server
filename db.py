@@ -118,3 +118,11 @@ class userDB:
             (newPassword, id),
         )
         self.conn.commit()
+
+    def getAllUsers(self):
+        self.cursor.execute(
+            """
+            SELECT * FROM user
+            """
+        )
+        return self.cursor.fetchall()
