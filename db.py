@@ -46,7 +46,7 @@ class userDB:
 
         self.cursor.execute(
             """
-            INSERT INTO user (uid, id, password, name, admin, etc)
+            INSERT INTO user (id, password, name, admin, etc)
             VALUES (?, ?, ?, ?, ?)
             """,
             (id, encryptPassword, name, admin, etc),
