@@ -1,23 +1,7 @@
 import os
 import json
-import string
 import os.path as osp
 from config import *
-from functools import wraps
-
-
-def namefilter(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        uuid = kwargs.get("uuid")
-        if not uuid:
-            raise Exception("No uuid provided")
-        if not all(c in string.ascii_letters + string.digits + "-_@." for c in uuid):
-            raise Exception("uuid contains invalid characters")
-        return func(*args, **kwargs)
-
-    return wrapper
-
 
 class Manage:
     def __init__(self):
@@ -26,12 +10,12 @@ class Manage:
     def getPeers(self):
         return os.listdir(self.path)
 
-    def getPeer(self, uuid):
-        if not uuid.endswith(".conf"):
-            uuid += ".conf"
+    def getPeer(self, uid):
+        if not uid.endswith(".conf"):
+            uid += ".conf"
 
-        if uuid in self.getPeers():
-            with open(osp.join(self.path, uuid)) as f:
+        if uid in self.getPeers():
+            with open(osp.join(self.path, uid)) as f:
                 data = f.read().split("\n")
 
                 return json.dumps(
@@ -48,19 +32,17 @@ class Manage:
 
         raise Exception("Peer not found")
 
-    @namefilter
-    def addPeer(self, uuid):
-        os.system(f"pivpn add -n {uuid}")
+    def addPeer(self, uid):
+        peerAddReturn = os.system(f"pivpn add -n infosec_{uid}")
 
-        if f"{uuid}.conf" in self.getPeers():
+        if not peerAddReturn:
             return True
         raise Exception("Peer not added")
 
-    @namefilter
-    def removePeer(self, uuid):
-        os.system(f"pivpn remove -y {uuid}")
+    def removePeer(self, uid):
+        peerRemoveReturn = os.system(f"pivpn remove -y infosec_{uid}")
 
-        if f"{uuid}.conf" not in self.getPeers():
+        if not peerRemoveReturn:
             return True
         raise Exception("Peer not removed")
 

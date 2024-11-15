@@ -19,7 +19,7 @@ async def root():
 async def signin(user: SigninUser):
     try:
         userData = userDBC.getUser(**user.model_dump())
-        peer = vpnManage.getPeer(uuid=userData[0])
+        peer = vpnManage.getPeer(uid=userData[0])
         peer = base64.b64encode(peer.encode()).decode()
         return {"message": "Success", "peer": peer}
     except Exception as e:
