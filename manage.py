@@ -12,6 +12,8 @@ def namefilter(func):
         uid = kwargs.get("uid")
         if not uid:
             raise Exception("No uid provided")
+        if not isinstance(uid, str):
+            uid = str(uid)
         if not all(c in string.ascii_letters + string.digits + "-_@." for c in uid):
             raise Exception("uid contains invalid characters")
         return func(*args, **kwargs)
