@@ -13,7 +13,7 @@ def singleSignup():
     userDBC.insert(id, password, name, admin)
 
     user = userDBC.getUser(id, password)
-    vpnManage.addPeer(uuid=user[0])
+    vpnManage.addPeer(uid=user[0])
 
 def showAllUsers():
     users = userDBC.getAllUsers()
@@ -28,11 +28,11 @@ def multiSignup(prefix, password, start=1, count=10):
         userDBC.insert(id, password, name, admin)
 
         user = userDBC.getUser(id, password)
-        vpnManage.addPeer(uuid=user[0])
+        vpnManage.addPeer(uid=user[0])
 
 def removeUser(id):
     user = userDBC.getUser(id, "password")
-    vpnManage.removePeer(uuid=user[0])
+    vpnManage.removePeer(uid=user[0])
     userDBC.delete(id)
 
 

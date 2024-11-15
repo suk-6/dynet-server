@@ -9,11 +9,11 @@ from functools import wraps
 def namefilter(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        uuid = kwargs.get("uuid")
-        if not uuid:
-            raise Exception("No uuid provided")
-        if not all(c in string.ascii_letters + string.digits + "-_@." for c in uuid):
-            raise Exception("uuid contains invalid characters")
+        uid = kwargs.get("uid")
+        if not uid:
+            raise Exception("No uid provided")
+        if not all(c in string.ascii_letters + string.digits + "-_@." for c in uid):
+            raise Exception("uid contains invalid characters")
         return func(*args, **kwargs)
 
     return wrapper
@@ -26,12 +26,12 @@ class Manage:
     def getPeers(self):
         return os.listdir(self.path)
 
-    def getPeer(self, uuid):
-        if not uuid.endswith(".conf"):
-            uuid += ".conf"
+    def getPeer(self, uid):
+        if not uid.endswith(".conf"):
+            uid += ".conf"
 
-        if uuid in self.getPeers():
-            with open(osp.join(self.path, uuid)) as f:
+        if uid in self.getPeers():
+            with open(osp.join(self.path, uid)) as f:
                 data = f.read().split("\n")
 
                 return json.dumps(
@@ -49,18 +49,18 @@ class Manage:
         raise Exception("Peer not found")
 
     @namefilter
-    def addPeer(self, uuid):
-        os.system(f"pivpn add -n {uuid}")
+    def addPeer(self, uid):
+        os.system(f"pivpn add -n {uid}")
 
-        if f"{uuid}.conf" in self.getPeers():
+        if f"{uid}.conf" in self.getPeers():
             return True
         raise Exception("Peer not added")
 
     @namefilter
-    def removePeer(self, uuid):
-        os.system(f"pivpn remove -y {uuid}")
+    def removePeer(self, uid):
+        os.system(f"pivpn remove -y {uid}")
 
-        if f"{uuid}.conf" not in self.getPeers():
+        if f"{uid}.conf" not in self.getPeers():
             return True
         raise Exception("Peer not removed")
 

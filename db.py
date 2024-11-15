@@ -1,5 +1,4 @@
 import json
-import uuid
 import bcrypt
 import sqlite3
 
@@ -27,7 +26,7 @@ class userDB:
         self.cursor.execute(
             """
             CREATE TABLE user (
-                uuid TEXT PRIMARY KEY NOT NULL,
+                uid INTEGER PRIMARY KEY AUTOINCREMENT,
                 id TEXT NOT NULL,
                 password TEXT NOT NULL,
                 name TEXT NOT NULL,
@@ -47,10 +46,10 @@ class userDB:
 
         self.cursor.execute(
             """
-            INSERT INTO user (uuid, id, password, name, admin, etc)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO user (uid, id, password, name, admin, etc)
+            VALUES (?, ?, ?, ?, ?)
             """,
-            (str(uuid.uuid4()), id, encryptPassword, name, admin, etc),
+            (id, encryptPassword, name, admin, etc),
         )
         self.conn.commit()
 
