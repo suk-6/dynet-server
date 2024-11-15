@@ -51,18 +51,18 @@ class Manage:
         raise Exception("Peer not found")
 
     @namefilter
-    def addPeer(self, uid):
-        os.system(f"pivpn add -n infosec_{uid}")
+    def addPeer(self, id):
+        peerAddReturn = os.system(f"pivpn add -n infosec_{id}")
 
-        if f"{uid}.conf" in self.getPeers():
+        if not peerAddReturn:
             return True
         raise Exception("Peer not added")
 
     @namefilter
-    def removePeer(self, uid):
-        os.system(f"pivpn remove -y infosec_{uid}")
+    def removePeer(self, id):
+        peerRemoveReturn = os.system(f"pivpn remove -y infosec_{id}")
 
-        if f"{uid}.conf" not in self.getPeers():
+        if not peerRemoveReturn:
             return True
         raise Exception("Peer not removed")
 
