@@ -52,7 +52,7 @@ class Manage:
 
     @namefilter
     def addPeer(self, uid):
-        os.system(f"pivpn add -n {uid}")
+        os.system(f"pivpn add -n infosec_{uid}")
 
         if f"{uid}.conf" in self.getPeers():
             return True
@@ -60,7 +60,7 @@ class Manage:
 
     @namefilter
     def removePeer(self, uid):
-        os.system(f"pivpn remove -y {uid}")
+        os.system(f"pivpn remove -y infosec_{uid}")
 
         if f"{uid}.conf" not in self.getPeers():
             return True
