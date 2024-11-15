@@ -3,23 +3,6 @@ import json
 import string
 import os.path as osp
 from config import *
-from functools import wraps
-
-
-def namefilter(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        uid = kwargs.get("uid")
-        if not uid:
-            raise Exception("No uid provided")
-        if not isinstance(uid, str):
-            uid = str(uid)
-        if not all(c in string.ascii_letters + string.digits + "-_@." for c in uid):
-            raise Exception("uid contains invalid characters")
-        return func(*args, **kwargs)
-
-    return wrapper
-
 
 class Manage:
     def __init__(self):
@@ -50,17 +33,15 @@ class Manage:
 
         raise Exception("Peer not found")
 
-    @namefilter
-    def addPeer(self, id):
-        peerAddReturn = os.system(f"pivpn add -n infosec_{id}")
+    def addPeer(self, uid):
+        peerAddReturn = os.system(f"pivpn add -n infosec_{uid}")
 
         if not peerAddReturn:
             return True
         raise Exception("Peer not added")
 
-    @namefilter
-    def removePeer(self, id):
-        peerRemoveReturn = os.system(f"pivpn remove -y infosec_{id}")
+    def removePeer(self, uid):
+        peerRemoveReturn = os.system(f"pivpn remove -y infosec_{uid}")
 
         if not peerRemoveReturn:
             return True
