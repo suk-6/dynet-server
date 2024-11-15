@@ -1,6 +1,5 @@
 import os
 import json
-import string
 import os.path as osp
 from config import *
 
