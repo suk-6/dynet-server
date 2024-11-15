@@ -49,7 +49,7 @@ class userDB:
             INSERT INTO user (id, password, name, admin, etc)
             VALUES (?, ?, ?, ?, ?)
             """,
-            ("infosec_"+id, encryptPassword, name, admin, etc),
+            (id, encryptPassword, name, admin, etc),
         )
         self.conn.commit()
 
